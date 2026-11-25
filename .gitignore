@@ -1,0 +1,49 @@
+# Entorno y credenciales
+.env
+.env.*
+!.env.example
+
+# Datos clínicos, imágenes cargadas y datasets (nunca en Git)
+uploads/
+data/
+datasets/
+*.dcm
+*.dicom
+*.nii
+*.nii.gz
+
+# Pesos y artefactos de modelos
+*.pt
+*.pth
+*.onnx
+*.ckpt
+ml/runs/
+ml/checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+
+# Node / frontend
+node_modules/
+dist/
+*.local
+npm-debug.log*
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
