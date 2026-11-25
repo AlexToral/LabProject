@@ -2,13 +2,13 @@
 
 **Plataforma de apoyo al análisis de ultrasonido dúplex Doppler para el síndrome de salida torácica venoso (vTOS).**
 
-![Estado](https://img.shields.io/badge/Estado-MVP%20en%20planeaci%C3%B3n-orange)
+![Estado](https://img.shields.io/badge/Estado-MVP%20en%20desarrollo-yellow)
 ![Python](https://img.shields.io/badge/Backend-Python%20%7C%20FastAPI-3776AB)
 ![React](https://img.shields.io/badge/Frontend-React%20%7C%20TypeScript-149ECA)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1)
 ![Docker](https://img.shields.io/badge/Entorno-Docker%20Compose-2496ED)
 
-> **Estado del proyecto:** propuesta técnica y funcional del MVP. La arquitectura, los endpoints y las instrucciones de ejecución describen la implementación prevista; todavía no representan funcionalidades verificadas en un repositorio existente.
+> **Estado del proyecto:** MVP en desarrollo. La base del proyecto (estructura, API con `/health`, esquema de PostgreSQL, frontend y Docker Compose) está implementada y verificada; los endpoints de estudios, mediciones y evaluaciones descritos abajo son la implementación prevista para las etapas siguientes.
 >
 > **Uso previsto:** prototipo de investigación y apoyo a la revisión por especialistas. No es un dispositivo médico validado ni sustituye el diagnóstico de un radiólogo.
 
@@ -316,7 +316,7 @@ Los estudios reales, archivos de entrenamiento y credenciales se mantienen fuera
 
 ## Instalación y ejecución
 
-> Guía prevista para cuando estén implementados los servicios, Dockerfiles y el archivo `compose.yaml`. No se ha verificado la ejecución porque este README documenta el proyecto en su etapa de planeación.
+> Verificado con la etapa 1 (base del proyecto): los servicios `db`, `backend` y `frontend` arrancan con Docker Compose, el backend aplica las migraciones al iniciar y los datos persisten tras reiniciar. Los endpoints de estudios, imágenes y evaluaciones se incorporan en las etapas siguientes.
 
 ### Requisitos
 
@@ -334,7 +334,7 @@ cp .env.example .env
 
 En PowerShell se puede utilizar `Copy-Item .env.example .env`.
 
-Ejemplo de variables previstas en `.env.example`:
+Variables definidas en `.env.example`:
 
 ```dotenv
 POSTGRES_DB=mloperculo
@@ -342,10 +342,13 @@ POSTGRES_USER=mloperculo
 POSTGRES_PASSWORD=change_me_local_only
 DATABASE_URL=postgresql://mloperculo:change_me_local_only@db:5432/mloperculo
 UPLOAD_DIR=/app/uploads
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 VITE_API_URL=http://localhost:8000
 ```
 
-La contraseña es un ejemplo para desarrollo local. Si se cambia, actualizar también `DATABASE_URL`. No almacenar el archivo `.env` en Git. El servicio de base de datos utilizará el nombre `db` dentro de la red de Compose. El backend deberá inicializar o migrar el esquema antes de aceptar estudios, y la base de datos y archivos deberán usar volúmenes persistentes.
+La contraseña es un ejemplo para desarrollo local. Si se cambia, actualizar también `DATABASE_URL`. No almacenar el archivo `.env` en Git. El servicio de base de datos usa el nombre `db` dentro de la red de Compose. El backend ejecuta `alembic upgrade head` antes de aceptar peticiones, y la base de datos (`pgdata`) y las imágenes (`uploads`) usan volúmenes persistentes.
+
+Si se cambian `POSTGRES_USER`, `POSTGRES_PASSWORD` o `POSTGRES_DB` después del primer arranque, PostgreSQL conserva los valores originales del volumen; para aplicarlos hay que recrear el volumen (`docker compose down -v`, lo que borra los datos).
 
 ### Levantar la aplicación
 
@@ -422,7 +425,7 @@ Antes de utilizar el sistema en un entorno asistencial se requiere un protocolo 
 
 | Etapa | Entregable | Estado inicial |
 | --- | --- | --- |
-| 1. Base del proyecto | Repositorio, frontend, API, PostgreSQL y Docker Compose | Pendiente |
+| 1. Base del proyecto | Repositorio, frontend, API, PostgreSQL y Docker Compose | En curso (issues #1–#5 completados) |
 | 2. Gestión de estudios | Registro, almacenamiento y visualización de imágenes | Pendiente |
 | 3. Mediciones y reglas | Formulario, comparación y cálculo de criterios | Pendiente |
 | 4. Revisión y pruebas | Reporte, historial y pruebas automatizadas | Pendiente |
