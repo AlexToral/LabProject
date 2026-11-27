@@ -6,6 +6,7 @@
 # Datos clínicos, imágenes cargadas y datasets (nunca en Git)
 uploads/
 data/
+!src/data/
 datasets/
 *.dcm
 *.dicom
@@ -26,6 +27,7 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
+.pytest_tmp/
 .ruff_cache/
 .mypy_cache/
 .coverage
@@ -47,3 +49,24 @@ npm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Material clínico y artefactos derivados (cualquier nivel del repositorio)
+**/dataset/raw/
+**/dataset/anonymized/
+**/dataset/processed/
+**/dataset/annotations/
+**/dataset/metadata/
+reports/data_quality/
+*.eml
+*.EML
+*.png.part
+**/descargas.csv
+**/*onedrive*link*
+**/*onedrive*url*
+*.session
+*.session.json
+*.key
+*.pem
+.uv-cache/
+*.tmp
+*.temp
