@@ -475,3 +475,33 @@ La licencia del código está pendiente de acuerdo entre los responsables del pr
 ---
 
 **MLOpérculo · Investigación aplicada a imagenología vascular y desarrollo de software.**
+
+## Auditoría exploratoria local del conjunto de imágenes
+
+Este trabajo preliminar documenta datos locales. No completa la [revisión de privacidad E4-06](https://github.com/AlexToral/LabProject/issues/22) ni la [decisión de viabilidad E5-01](https://github.com/AlexToral/LabProject/issues/23), que permanece bloqueada por E4-06. La etapa 1 del roadmap corresponde a la base del producto. Antes de usar los estudios para IA faltan autorización institucional, anonimización revisada, vínculos verificados de paciente y estudio, y comprobación de calibración espacial.
+
+Se implementó un análisis local y reproducible de las capturas ubicadas realmente en `MLo/dataset/raw/`. El 27 de noviembre de 2026 se analizaron 139 archivos: 139 PNG válidos, 0 inválidos, 96 imágenes de 808 × 842 y 43 de 1626 × 842 píxeles. Se encontraron 11 pares de duplicados exactos por SHA-256 y 80 pares candidatos visuales por pHash; estos últimos requieren revisión humana. Los 139 archivos son capturas, no pacientes ni estudios identificados.
+
+Una visualización preliminar de cuatro muestras por el asistente marcó identificadores visibles dentro de los píxeles; no equivale a una revisión de privacidad autorizada. Las 139 imágenes siguen pendientes de esa revisión. No debe compartirse ninguna captura ni considerarse anonimizada por carecer de metadatos PNG. Los reportes, inventarios y CSV de revisión permanecen fuera de Git. No se asignaron diagnósticos ni mediciones clínicas.
+
+### Copia compartida del conjunto
+
+El equipo indicó que los datos se colocaron en DropCloud de Cloudflare, bajo `Hombro/raw` y `Hombro/metadata`. La captura proporcionada muestra 146 archivos en total; aún no se han verificado desde aquí el conteo por carpeta, los SHA-256 ni los permisos de acceso. Esta ubicación compartida es independiente del volumen local `uploads` de Docker previsto para la aplicación. Los originales y metadatos clínicos siguen excluidos de Git.
+
+Cada colaborador autorizado debe obtener una copia desde DropCloud en una ruta privada y ejecutar el análisis con `--input` apuntando a su carpeta `raw`. Antes de usar la copia compartida como referencia, comparar sus 139 PNG esperados con los SHA-256 del inventario local y confirmar que los CSV requeridos estén en `metadata`. No colocar enlaces de acceso, credenciales ni nombres de pacientes en este repositorio.
+
+### Ejecutar el análisis
+
+Desde la raíz del repositorio, con Python y un entorno virtual local:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements-data.txt
+.venv\Scripts\python.exe scripts\analyze_dataset.py
+.venv\Scripts\python.exe scripts\analyze_dataset.py --input MLo\dataset\raw --output reports\data_quality
+.venv\Scripts\python.exe -m pytest -q tests\test_data_pipeline.py --basetemp .pytest_tmp
+```
+
+Si se dispone de un directorio `dataset/raw/` diferente, puede pasarse con `--input dataset/raw`. Por defecto los CSV privados se escriben junto a la carpeta de entrada, en `metadata/`; `--metadata` permite cambiarlo. El inventario, la plantilla `clinical_labels.csv`, el cribado `visual_review.csv` y la revisión manual `manual_visual_review.csv` se guardan en `MLo/dataset/metadata/`. Los gráficos, el resumen y los informes se guardan en `reports/data_quality/`. El pipeline actualiza los CSV sin duplicar filas ni borrar anotaciones manuales. Verifica SHA-256 antes y después de cada ejecución.
+
+Los campos y valores permitidos están descritos en [el diccionario de datos](docs/data_dictionary.md). Las banderas de calidad sirven para priorizar revisión; no justifican borrar capturas. Cualquier anonimización futura debe preservar anatomía, profundidad, espectros y mediciones bajo revisión clínica. La partición de entrenamiento, cuando exista vinculación verificada entre imágenes y pacientes, deberá hacerse por paciente.
