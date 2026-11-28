@@ -484,6 +484,12 @@ Se implementó un análisis local y reproducible de las capturas ubicadas realme
 
 Una visualización preliminar de cuatro muestras por el asistente marcó identificadores visibles dentro de los píxeles; no equivale a una revisión de privacidad autorizada. Las 139 imágenes siguen pendientes de esa revisión. No debe compartirse ninguna captura ni considerarse anonimizada por carecer de metadatos PNG. Los reportes, inventarios y CSV de revisión permanecen fuera de Git. No se asignaron diagnósticos ni mediciones clínicas.
 
+### Copia compartida del conjunto
+
+El equipo indicó que los datos se colocaron en DropCloud de Cloudflare, bajo `Hombro/raw` y `Hombro/metadata`. La captura proporcionada muestra 146 archivos en total; aún no se han verificado desde aquí el conteo por carpeta, los SHA-256 ni los permisos de acceso. Esta ubicación compartida es independiente del volumen local `uploads` de Docker previsto para la aplicación. Los originales y metadatos clínicos siguen excluidos de Git.
+
+Cada colaborador autorizado debe obtener una copia desde DropCloud en una ruta privada y ejecutar el análisis con `--input` apuntando a su carpeta `raw`. Antes de usar la copia compartida como referencia, comparar sus 139 PNG esperados con los SHA-256 del inventario local y confirmar que los CSV requeridos estén en `metadata`. No colocar enlaces de acceso, credenciales ni nombres de pacientes en este repositorio.
+
 ### Ejecutar el análisis
 
 Desde la raíz del repositorio, con Python y un entorno virtual local:

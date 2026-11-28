@@ -2,6 +2,8 @@
 
 Los CSV de inventario, revisión y etiquetas se guardan en `MLo/dataset/metadata/`, fuera de Git. Ningún identificador representa por sí mismo a un paciente. Los campos vacíos significan **no determinado**; `UNKNOWN` es una categoría explícita pendiente de revisión. Las fechas de los nombres de archivo no se interpretan como fechas clínicas.
 
+El equipo indicó una copia compartida privada en DropCloud bajo `Hombro/metadata`; su contenido y hashes aún requieren verificación independiente. La copia local sigue siendo la fuente de los resultados de esta auditoría.
+
 ## `image_inventory.csv`
 
 | Campo | Tipo y unidad | Significado / valores |
